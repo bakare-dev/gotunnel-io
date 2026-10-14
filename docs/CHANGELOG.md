@@ -15,6 +15,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+---
+
+## [1.1.1] - 2026-10-14
+
+### Changed
+
+- The npm platform packages are now published under the `@gotunnel` organisation (`@gotunnel/darwin-arm64` and so on), and new releases reach npm automatically. Install and update commands are unchanged: `npm install -g gotunnel`.
+
+---
+
+## [1.1.0] - 2026-10-14
+
 ### Added
 
 - **One-line install.** `curl -fsSL https://gotunnel.bakaredev.site/install.sh | sh` on macOS and Linux, `irm https://gotunnel.bakaredev.site/install.ps1 | iex` on Windows. The script picks the right build, verifies its SHA-256 checksum and puts `gotunnel` on your PATH. `GOTUNNEL_VERSION` pins a release and `GOTUNNEL_INSTALL_DIR` changes where it goes.
@@ -75,4 +87,6 @@ The first release of GoTunnel, a free personal side project by [BakareDev](https
 ---
 
 [Unreleased]: https://github.com/bakare-dev/gotunnel-io/releases
+[1.1.1]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.1
+[1.1.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.0
 [1.0.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.0.0
