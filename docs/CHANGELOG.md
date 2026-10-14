@@ -17,31 +17,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
-## [1.1.3] - 2026-10-14
-
-### Fixed
-
-- Releases now confirm that every npm package is live on the registry before finishing, so a platform package can no longer be missing while the release reports success. In 1.1.2 the Apple Silicon, ARM64 Linux and Windows packages showed up late, and for a short time `npm install -g gotunnel` on those platforms installed a command with no binary behind it.
-
----
-
-## [1.1.2] - 2026-10-14
-
-### Fixed
-
-- `npm install -g gotunnel` installs the `gotunnel` command again. The 1.1.1 npm package was published without its launcher, so npm installed it without adding a command. The one-line install and `go install` were not affected.
-
----
-
-## [1.1.1] - 2026-10-14
+## [1.2.0] - 2026-10-14
 
 ### Changed
 
-- The npm platform packages are now published under the `@gotunnel` organisation (`@gotunnel/darwin-arm64` and so on), and new releases reach npm automatically. Install and update commands are unchanged: `npm install -g gotunnel`.
+- **Self-hosting:** the device token lifetime is now set with `GOTUNNEL_TOKEN_TTL`. The old `GOTUNNEL_BETA_TOKEN_TTL` still works when the new one isn't set.
+- **Self-hosting:** the server's registrations table is renamed from `beta_testers` to `devices`. This happens automatically, with no data loss, on the next start or `gotunnel migrate`.
 
 ---
 
 ## [1.1.0] - 2026-10-14
+
+Install GoTunnel in one line, with npm, or with `go install`.
+
+Versions 1.1.1 to 1.1.3, released the same day, only fixed the npm publishing pipeline and made no changes to GoTunnel itself. If you installed 1.1.1 with npm and have no `gotunnel` command, run `npm install -g gotunnel@latest`.
 
 ### Added
 
@@ -103,8 +92,6 @@ The first release of GoTunnel, a free personal side project by [BakareDev](https
 ---
 
 [Unreleased]: https://github.com/bakare-dev/gotunnel-io/releases
-[1.1.3]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.3
-[1.1.2]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.2
-[1.1.1]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.1
+[1.2.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.2.0
 [1.1.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.0
 [1.0.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.0.0
