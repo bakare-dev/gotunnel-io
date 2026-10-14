@@ -17,6 +17,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [1.1.2] - 2026-10-14
+
+### Fixed
+
+- `npm install -g gotunnel` installs the `gotunnel` command again. The 1.1.1 npm package was published without its launcher, so npm installed it without adding a command. The one-line install and `go install` were not affected.
+
+---
+
 ## [1.1.1] - 2026-10-14
 
 ### Changed
@@ -87,6 +95,7 @@ The first release of GoTunnel, a free personal side project by [BakareDev](https
 ---
 
 [Unreleased]: https://github.com/bakare-dev/gotunnel-io/releases
+[1.1.2]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.2
 [1.1.1]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.1
 [1.1.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.0
 [1.0.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.0.0

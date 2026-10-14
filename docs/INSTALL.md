@@ -130,15 +130,24 @@ If SmartScreen warns about the file, choose **More info → Run anyway**.
 
 ### Check a download yourself
 
-Compare the file's SHA-256 with its line in `checksums.txt`:
+Compare the file's SHA-256 with its line in `checksums.txt`.
+
+macOS:
 
 ```bash
-shasum -a 256 gotunnel-darwin-arm64         # macOS
-sha256sum gotunnel-linux-amd64              # Linux
+shasum -a 256 gotunnel-darwin-arm64
 ```
 
+Linux:
+
+```bash
+sha256sum gotunnel-linux-amd64
+```
+
+Windows (PowerShell):
+
 ```powershell
-Get-FileHash .\gotunnel-windows-amd64.exe   # Windows
+Get-FileHash .\gotunnel-windows-amd64.exe
 ```
 
 ## Update

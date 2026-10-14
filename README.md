@@ -24,12 +24,19 @@ Windows (PowerShell):
 irm https://gotunnel.bakaredev.site/install.ps1 | iex
 ```
 
-With npm (Node.js 22+) or Go (1.21+):
+With npm (Node.js 22+):
 
 ```bash
 npm install -g gotunnel
+```
+
+With Go (1.21+):
+
+```bash
 go install github.com/bakare-dev/gotunnel-io/cmd/gotunnel@latest
 ```
+
+Pick one method; you only need GoTunnel installed once.
 
 Every method checks the download against the release's SHA-256 `checksums.txt`. The **[install guide](docs/INSTALL.md)** covers each one step by step, plus direct binary downloads, manual install, updating, uninstalling and troubleshooting. All builds are also on the [releases page](https://github.com/bakare-dev/gotunnel-io/releases/latest).
 
