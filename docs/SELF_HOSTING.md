@@ -9,7 +9,7 @@ There are two roles:
 
 ## 1. Install the binary on both machines
 
-Grab the right build from the [download page](https://gotunnel.bakaredev.site/download) or the [releases](https://github.com/bakare-dev/gotunnel-io/releases/latest) and put `gotunnel` on your `PATH` (see the README install steps for macOS/Linux/Windows).
+Install `gotunnel` on the server with any method from the [install guide](INSTALL.md); on Linux the one-liner is `curl -fsSL https://gotunnel.bakaredev.site/install.sh | sh`.
 
 ## 2. Start the server
 

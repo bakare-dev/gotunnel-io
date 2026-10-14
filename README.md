@@ -6,66 +6,32 @@
 
 HTTP and TCP tunnels that put a local app or database on the internet with one command.
 
-This repository hosts the **prebuilt GoTunnel binaries** and docs. Use the download page for the recommended installer for your platform, or grab a release artifact directly from GitHub.
+This repository hosts the **prebuilt GoTunnel binaries**, the docs, and the small launcher behind `go install`.
 
 > **A side project, not a company.** GoTunnel is a personal project by [BakareDev](https://bakaredev.site), built to learn networking and systems design in Go. The hosted server is free with fair-use limits (30-minute sessions, 3 per day, one tunnel per device), provided as-is without guarantees, and may change or go offline. For anything important, [self-host it](docs/SELF_HOSTING.md).
 
-## Download
-
-Get the latest GoTunnel build from the official download page:
-
-**[Download GoTunnel](https://gotunnel.bakaredev.site/download)**
-
-Direct release artifacts are also available below:
-
-| Platform | Architecture | Download |
-| --- | --- | --- |
-| macOS | Apple Silicon (M1+) | [gotunnel-darwin-arm64](https://github.com/bakare-dev/gotunnel-io/releases/latest/download/gotunnel-darwin-arm64) |
-| macOS | Intel | [gotunnel-darwin-amd64](https://github.com/bakare-dev/gotunnel-io/releases/latest/download/gotunnel-darwin-amd64) |
-| Linux | x86-64 | [gotunnel-linux-amd64](https://github.com/bakare-dev/gotunnel-io/releases/latest/download/gotunnel-linux-amd64) |
-| Linux | ARM64 | [gotunnel-linux-arm64](https://github.com/bakare-dev/gotunnel-io/releases/latest/download/gotunnel-linux-arm64) |
-| Windows | x86-64 | [gotunnel-windows-amd64.exe](https://github.com/bakare-dev/gotunnel-io/releases/latest/download/gotunnel-windows-amd64.exe) |
-
-Or see all builds on the [releases page](https://github.com/bakare-dev/gotunnel-io/releases/latest).
-
 ## Install
 
-### macOS (Apple Silicon)
+macOS and Linux:
 
 ```bash
-curl -L -o gotunnel https://github.com/bakare-dev/gotunnel-io/releases/latest/download/gotunnel-darwin-arm64
-chmod +x gotunnel
-sudo mv gotunnel /usr/local/bin/gotunnel
-xattr -dr com.apple.quarantine /usr/local/bin/gotunnel   # if Gatekeeper blocks it
+curl -fsSL https://gotunnel.bakaredev.site/install.sh | sh
 ```
 
-(For Intel Macs, swap `gotunnel-darwin-arm64` for `gotunnel-darwin-amd64`.)
-
-### Linux (x86-64)
-
-```bash
-curl -L -o gotunnel https://github.com/bakare-dev/gotunnel-io/releases/latest/download/gotunnel-linux-amd64
-chmod +x gotunnel
-sudo mv gotunnel /usr/local/bin/gotunnel
-```
-
-(For ARM64, use `gotunnel-linux-arm64`.)
-
-### Windows
-
-Download [gotunnel-windows-amd64.exe](https://github.com/bakare-dev/gotunnel-io/releases/latest/download/gotunnel-windows-amd64.exe), then in PowerShell install it to a per-user folder and add that folder to your `PATH`:
+Windows (PowerShell):
 
 ```powershell
-$dir = "$env:LOCALAPPDATA\Programs\gotunnel"
-New-Item -ItemType Directory -Force -Path $dir | Out-Null
-Move-Item -Force "$HOME\Downloads\gotunnel-windows-amd64.exe" "$dir\gotunnel.exe"
-$old = [Environment]::GetEnvironmentVariable("Path","User")
-if ($old -notlike "*$dir*") { [Environment]::SetEnvironmentVariable("Path", "$old;$dir", "User") }
-$env:Path += ";$dir"
-gotunnel version
+irm https://gotunnel.bakaredev.site/install.ps1 | iex
 ```
 
-The `$env:Path += ";$dir"` line makes `gotunnel` work in the current window; the `SetEnvironmentVariable` line makes it stick for new terminals. If `gotunnel` still isn't found, open a new PowerShell window.
+With npm (Node.js 22+) or Go (1.21+):
+
+```bash
+npm install -g gotunnel
+go install github.com/bakare-dev/gotunnel-io/cmd/gotunnel@latest
+```
+
+Every method checks the download against the release's SHA-256 `checksums.txt`. The **[install guide](docs/INSTALL.md)** covers each one step by step, plus direct binary downloads, manual install, updating, uninstalling and troubleshooting. All builds are also on the [releases page](https://github.com/bakare-dev/gotunnel-io/releases/latest).
 
 ## Quick start
 
@@ -95,6 +61,8 @@ Upgrade to the latest release in place:
 gotunnel update
 ```
 
+If you installed with npm, run `npm install -g gotunnel@latest` instead. See [Update](docs/INSTALL.md#update).
+
 ## Uninstall
 
 Remove GoTunnel from your computer:
@@ -103,7 +71,7 @@ Remove GoTunnel from your computer:
 gotunnel uninstall
 ```
 
-It frees your email on the hosted server so you can register again later, on this or another device. Then it deletes your token and device ID, and the `gotunnel` binary. On macOS and Linux it asks for your password if the binary is in `/usr/local/bin`. On Windows it also removes the install folder from your `PATH`. See [`gotunnel uninstall`](docs/CLI.md#gotunnel-uninstall) for the options.
+It frees your email on the hosted server so you can register again later, on this or another device. Then it deletes your token and device ID, and the `gotunnel` binary. On macOS and Linux it asks for your password if the binary is in `/usr/local/bin`. On Windows it also removes the install folder from your `PATH`. If you installed with npm, it leaves the package alone; finish with `npm uninstall -g gotunnel`. See [`gotunnel uninstall`](docs/CLI.md#gotunnel-uninstall) for the options.
 
 ## Commands
 
@@ -127,6 +95,7 @@ The docs below explain how GoTunnel works so you can understand what you're runn
 
 | Document | What it covers |
 | --- | --- |
+| [Download & install](docs/INSTALL.md) | Every install method, direct downloads, updating, uninstalling and troubleshooting |
 | [Command reference](docs/CLI.md) | Every command: `http`, `tcp`, `status`, `audit`, `benchmark`, `inspect`, `update`, `uninstall`, `admin` |
 | [Self-Hosting](docs/SELF_HOSTING.md) | Run your own GoTunnel server on a VPS instead of the hosted server |
 | [Architecture](docs/ARCHITECTURE.md) | How the client, server, tunnels, and security model fit together |

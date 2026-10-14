@@ -98,7 +98,7 @@ This is different from the `--inspect` flag on `gotunnel http`, which starts a l
 
 ## `gotunnel update`
 
-Replaces the binary with the latest release.
+Replaces the binary with the latest release. If GoTunnel was installed with npm, it changes nothing and tells you to run `npm install -g gotunnel@latest`, so npm stays in charge of the files it installed.
 
 ## `gotunnel uninstall`
 
@@ -106,7 +106,7 @@ Removes GoTunnel from this computer. It lists what it will do and asks before do
 
 1. Frees this device's registration on the server, so your email can be registered again on this or another device.
 2. Deletes the config folder, including `token.json` and `device_id`.
-3. Deletes the `gotunnel` binary. On macOS and Linux it runs `sudo rm` if the binary is in a folder you can't write to, such as `/usr/local/bin`. On Windows the binary is deleted a moment after the command exits, and the install folder is removed from your user `PATH`.
+3. Deletes the `gotunnel` binary. On macOS and Linux it runs `sudo rm` if the binary is in a folder you can't write to, such as `/usr/local/bin`. On Windows the binary is deleted a moment after the command exits, and the install folder is removed from your user `PATH`. If GoTunnel was installed with npm, this step is skipped; run `npm uninstall -g gotunnel` afterwards.
 
 If the server can't be reached, nothing is removed, so your email isn't left tied to a device you no longer have.
 

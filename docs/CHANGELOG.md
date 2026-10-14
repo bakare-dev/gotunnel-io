@@ -15,6 +15,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **One-line install.** `curl -fsSL https://gotunnel.bakaredev.site/install.sh | sh` on macOS and Linux, `irm https://gotunnel.bakaredev.site/install.ps1 | iex` on Windows. The script picks the right build, verifies its SHA-256 checksum and puts `gotunnel` on your PATH. `GOTUNNEL_VERSION` pins a release and `GOTUNNEL_INSTALL_DIR` changes where it goes.
+- **npm package.** `npm install -g gotunnel` (Node.js 22+), or `npx gotunnel http 3000` without installing. It ships the prebuilt binary for your platform and downloads nothing at install time.
+- **`go install`.** `go install github.com/bakare-dev/gotunnel-io/cmd/gotunnel@latest` installs a small launcher that, on first run, downloads the matching release, verifies its checksum and replaces itself with it.
+- **Download & install guide** in the docs, covering every install method, direct downloads, updating, uninstalling and troubleshooting.
+- Each release now includes a `checksums.txt` with the SHA-256 of every binary.
+
+### Changed
+
+- `gotunnel update` and `gotunnel uninstall` recognise an npm install: `update` points you to `npm install -g gotunnel@latest`, and `uninstall` frees your registration and deletes your token but leaves removing the package to `npm uninstall -g gotunnel`.
+
 ---
 
 ## [1.0.0] - 2026-10-14
