@@ -67,9 +67,9 @@ Or run it once without installing:
 npx gotunnel http 3000
 ```
 
-The package ships the prebuilt binary for your platform in an `@bakaredev/gotunnel-<platform>` package, so nothing is downloaded during install. Supported: macOS (x64, ARM64), Linux (x64, ARM64) and Windows (x64).
+The package ships the prebuilt binary for your platform in an `@gotunnel/<platform>` package, so nothing is downloaded during install. Supported: macOS (x64, ARM64), Linux (x64, ARM64) and Windows (x64).
 
-If you see `the @bakaredev/gotunnel-… package is missing`, npm skipped optional dependencies. Reinstall without `--omit=optional` or `--no-optional`.
+If you see `the @gotunnel/… package is missing`, npm skipped optional dependencies. Reinstall without `--omit=optional` or `--no-optional`.
 
 ## Go
 
