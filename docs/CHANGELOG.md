@@ -17,6 +17,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [1.1.3] - 2026-10-14
+
+### Fixed
+
+- Releases now confirm that every npm package is live on the registry before finishing, so a platform package can no longer be missing while the release reports success. In 1.1.2 the Apple Silicon, ARM64 Linux and Windows packages showed up late, and for a short time `npm install -g gotunnel` on those platforms installed a command with no binary behind it.
+
+---
+
 ## [1.1.2] - 2026-10-14
 
 ### Fixed
@@ -95,6 +103,7 @@ The first release of GoTunnel, a free personal side project by [BakareDev](https
 ---
 
 [Unreleased]: https://github.com/bakare-dev/gotunnel-io/releases
+[1.1.3]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.3
 [1.1.2]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.2
 [1.1.1]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.1
 [1.1.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.0
