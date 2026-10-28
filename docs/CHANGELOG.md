@@ -15,6 +15,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Security
+
+- **HTTP tunnels:** the first time someone opens an HTTP tunnel in a browser, they see a warning page explaining that it is served from someone's own computer. They click **Continue to site** to go through, and that choice is remembered for 7 days on that tunnel. API clients, webhooks, scripts and in-page requests are not affected. Browser tools can skip the page by sending the `Gotunnel-Skip-Browser-Warning` header.
+- **Self-hosting:** turn the warning page on with `GOTUNNEL_BROWSER_WARNING=true`. It is off by default.
+
 ---
 
 ## [1.2.0] - 2026-10-14
