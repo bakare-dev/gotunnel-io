@@ -15,6 +15,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Security
+
+- Device tokens are no longer stored on the server, only their hashes. **Self-hosting:** this removes the `signed_token` column from `devices` when the server starts or you run `gotunnel migrate`, so older server versions can't run against the database afterwards.
+
+### Fixed
+
+- **TCP tunnels:** the approval link could wrap or get cut off in the terminal view, so a copied link showed "Link not valid". It now sits on its own unbroken line. The inspector link stays on one line too.
+
 ---
 
 ## [1.3.0] - 2026-11-05
