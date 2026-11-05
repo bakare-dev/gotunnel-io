@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+---
+
+## [1.3.1] - 2026-11-05
+
 ### Security
 
 - Device tokens are no longer stored on the server, only their hashes. **Self-hosting:** this removes the `signed_token` column from `devices` when the server starts or you run `gotunnel migrate`, so older server versions can't run against the database afterwards.
@@ -145,6 +149,7 @@ The first release of GoTunnel, a free personal side project by [BakareDev](https
 ---
 
 [Unreleased]: https://github.com/bakare-dev/gotunnel-io/releases
+[1.3.1]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.3.1
 [1.3.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.3.0
 [1.2.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.2.0
 [1.1.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.0
