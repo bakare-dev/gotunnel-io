@@ -1,6 +1,6 @@
 # Command reference
 
-Every command defaults to the free hosted server, `gotunnel.bakaredev.site`. Pass `--server <host>` to point any of them at a self-hosted server instead. Run `gotunnel help` for the full flag list.
+`gotunnel http`, `gotunnel tcp` and the diagnostic commands default to the free hosted server, `gotunnel.site`. `gotunnel client` and the bare `gotunnel --local ...` form default to `localhost:9000`. Pass `--server <host>` to point any of them at a self-hosted server. A saved token is only ever sent to the server that issued it, over an encrypted connection; for any other server, set `GOTUNNEL_TOKEN`. Run `gotunnel help` for the full flag list.
 
 ## `gotunnel http <port>`
 
@@ -15,7 +15,7 @@ Takes a port (`3000` means `localhost:3000`) or a `host:port`. Any client flag c
 
 ### Request inspector
 
-While the tunnel is up, open `http://127.0.0.1:4040` to see every request that came through it. This is handy for testing webhooks. For each request you can:
+While the tunnel is up, open the inspector link GoTunnel prints (`http://127.0.0.1:4040/?token=...`) to see every request that came through it. The token changes on every run, so other users on the same machine can't read your traffic. This is handy for testing webhooks. For each request you can:
 
 - see the request and response headers and body, with JSON and form bodies formatted,
 - **Replay** it against your local service, without asking the sender to resend it,
@@ -33,11 +33,11 @@ gotunnel tcp 5432
 gotunnel tcp 3306 --allowlist 203.0.113.7,10.0.0.0/24
 ```
 
-You get a host and port, for example `k3x9m2qz7a.tcp.gotunnel.bakaredev.site:20017`, and ready-to-paste commands:
+You get a host and port, for example `k3x9m2qz7a.tcp.gotunnel.site:20017`, and ready-to-paste commands:
 
 ```bash
-psql  -h k3x9m2qz7a.tcp.gotunnel.bakaredev.site -p 20017 -U <user> -d <database>
-mysql -h k3x9m2qz7a.tcp.gotunnel.bakaredev.site -P 20017 -u <user> -p
+psql  -h k3x9m2qz7a.tcp.gotunnel.site -p 20017 -U <user> -d <database>
+mysql -h k3x9m2qz7a.tcp.gotunnel.site -P 20017 -u <user> -p
 ```
 
 **TCP tunnels are locked.** A connection is refused unless its IP is approved, in one of two ways:
@@ -54,12 +54,12 @@ Shows which server you are pointed at, this device's ID, whether it is registere
 ```text
 GoTunnel status
   version        v1.0.0
-  server         gotunnel.bakaredev.site (WebSocket over TLS)
+  server         gotunnel.site (WebSocket over TLS)
   device         6b88fdf5…
   registered     yes
   email          you@gmail.com
   token          valid, expires 2026-11-09 (30 days)
-  reachable      yes, 270ms (https://gotunnel.bakaredev.site/enroll/health → 200)
+  reachable      yes, 270ms (https://gotunnel.site/enroll/health → 200)
 ```
 
 Exits with status 1 if the server cannot be reached.
@@ -77,7 +77,7 @@ Checks how securely this machine connects and prints `PASS`, `WARN`, `FAIL` or `
 | device | Whether the stored token was issued to this device |
 | permissions | That the config folder and token file are readable only by you (skipped on Windows) |
 
-To check a static token without printing it: `gotunnel audit --token "$TOKEN"`. Exits with status 1 if any check fails.
+To check a static token, set `GOTUNNEL_TOKEN` and run `gotunnel audit`, which keeps it out of the process list. Exits with status 1 if any check fails.
 
 ## `gotunnel benchmark`
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -14,7 +15,13 @@ import (
 	"strings"
 	"time"
 
+	"aead.dev/minisign"
 	"github.com/minio/selfupdate"
+)
+
+const (
+	releasePublicKey = "RWTnJ6MHF0SvG0vo+EamvWQR10MhqWswNtQ4SqTqG/TEOzSMa6ZcR1Cb"
+	maxMetadataSize  = 1 << 20
 )
 
 var releasesURL = "https://github.com/bakare-dev/gotunnel-io/releases"
@@ -44,7 +51,7 @@ func main() {
 
 	fmt.Fprintf(os.Stderr, "Setting up GoTunnel %s for %s/%s (first run only)...\n", label, runtime.GOOS, runtime.GOARCH)
 
-	sum, err := expectedChecksum(base+"/checksums.txt", asset)
+	sum, err := verifiedChecksum(releasePublicKey, base+"/checksums.txt", base+"/checksums.txt.minisig", asset)
 	if err != nil {
 		fail("%v", err)
 	}
@@ -99,13 +106,33 @@ func assetName(goos, goarch string) (string, error) {
 	return name, nil
 }
 
-func expectedChecksum(url, asset string) ([]byte, error) {
+func readSmall(url string) ([]byte, error) {
 	body, err := open(url)
 	if err != nil {
 		return nil, err
 	}
 	defer body.Close()
-	return findChecksum(body, asset)
+	return io.ReadAll(io.LimitReader(body, maxMetadataSize))
+}
+
+func verifiedChecksum(publicKey, sumsURL, sigURL, asset string) ([]byte, error) {
+	sums, err := readSmall(sumsURL)
+	if err != nil {
+		return nil, err
+	}
+	signature, err := readSmall(sigURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var key minisign.PublicKey
+	if err := key.UnmarshalText([]byte(publicKey)); err != nil {
+		return nil, fmt.Errorf("the release public key is invalid: %w", err)
+	}
+	if !minisign.Verify(key, sums, signature) {
+		return nil, errors.New("the release signature is not valid, so nothing was installed")
+	}
+	return findChecksum(bytes.NewReader(sums), asset)
 }
 
 func findChecksum(r io.Reader, asset string) ([]byte, error) {
@@ -141,6 +168,6 @@ func open(url string) (io.ReadCloser, error) {
 
 func fail(format string, args ...any) {
 	fmt.Fprintf(os.Stderr, "gotunnel: "+format+"\n", args...)
-	fmt.Fprintln(os.Stderr, "Other ways to install: https://docs.gotunnel.bakaredev.site/INSTALL/")
+	fmt.Fprintln(os.Stderr, "Other ways to install: https://docs.gotunnel.site/INSTALL/")
 	os.Exit(1)
 }

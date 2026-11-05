@@ -15,7 +15,7 @@ When it's installed, run `gotunnel http 3000` to share a local app. See the [qui
 ## One line: macOS / Linux
 
 ```bash
-curl -fsSL https://gotunnel.bakaredev.site/install.sh | sh
+curl -fsSL https://gotunnel.site/install.sh | sh
 ```
 
 The script:
@@ -24,7 +24,7 @@ The script:
 2. Downloads it and checks it against the release's `checksums.txt`. If the checksum doesn't match, nothing is installed.
 3. Moves it to `/usr/local/bin/gotunnel`. If that folder needs administrator rights, it uses `sudo`, which may ask for your password.
 
-You can [read the script](https://gotunnel.bakaredev.site/install.sh) before running it. It works with `curl` or `wget`.
+You can [read the script](https://gotunnel.site/install.sh) before running it. It works with `curl` or `wget`.
 
 | Variable | What it does |
 | --- | --- |
@@ -34,7 +34,7 @@ You can [read the script](https://gotunnel.bakaredev.site/install.sh) before run
 Set them on `sh`, after the pipe. For example, to install without `sudo`:
 
 ```bash
-curl -fsSL https://gotunnel.bakaredev.site/install.sh | GOTUNNEL_INSTALL_DIR="$HOME/.local/bin" sh
+curl -fsSL https://gotunnel.site/install.sh | GOTUNNEL_INSTALL_DIR="$HOME/.local/bin" sh
 ```
 
 ## One line: Windows
@@ -42,15 +42,15 @@ curl -fsSL https://gotunnel.bakaredev.site/install.sh | GOTUNNEL_INSTALL_DIR="$H
 In PowerShell:
 
 ```powershell
-irm https://gotunnel.bakaredev.site/install.ps1 | iex
+irm https://gotunnel.site/install.ps1 | iex
 ```
 
 The script downloads `gotunnel-windows-amd64.exe`, checks its checksum, installs it as `%LOCALAPPDATA%\Programs\gotunnel\gotunnel.exe` and adds that folder to your user `PATH`. It doesn't need administrator rights. `gotunnel` works in the same window straight away; other windows that were already open need restarting.
 
-You can [read the script](https://gotunnel.bakaredev.site/install.ps1) first. `GOTUNNEL_VERSION` and `GOTUNNEL_INSTALL_DIR` work the same way as on macOS and Linux:
+You can [read the script](https://gotunnel.site/install.ps1) first. `GOTUNNEL_VERSION` and `GOTUNNEL_INSTALL_DIR` work the same way as on macOS and Linux:
 
 ```powershell
-$env:GOTUNNEL_VERSION = "v1.1.0"; irm https://gotunnel.bakaredev.site/install.ps1 | iex
+$env:GOTUNNEL_VERSION = "v1.1.0"; irm https://gotunnel.site/install.ps1 | iex
 ```
 
 ## npm

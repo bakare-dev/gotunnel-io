@@ -65,8 +65,8 @@ Visitor C ─┘
 The hosted server registers each device once. The first time you connect from a device with no token, the client asks for your Gmail address and the server emails a one-time code; entering it signs the device in. Under the hood:
 
 - The email must be a real `@gmail.com` address, aliases (`+tag`) are rejected, and dots are normalised, so one person maps to one account. Access is limited to **one device per email**.
-- On success the server issues an **HMAC-signed, device-bound token** with an expiry. The token is stored on your device and presented on every connect; the tunnel server verifies the signature locally, so normal connections don't hit the accounts database.
-- One-time codes live briefly in Redis with a resend cooldown and an attempt limit; enrolled testers are recorded in Postgres.
+- On success the server issues an **HMAC-signed, device-bound token** with an expiry. The token is stored on your device, tied to the server that issued it, and presented on every connect. The tunnel server verifies the signature and checks that the token is still the one on record for the device, so released or replaced tokens stop working. If that check can't run, the connection is refused and the client can try again.
+- One-time codes live briefly in Redis with a resend cooldown and an attempt limit, and emails and code attempts are limited per address and per client. Responses are the same whether or not an address is already registered or suspended; the explanation goes to that inbox. Registered devices are recorded in Postgres, and an expired registration no longer blocks a new one.
 - `gotunnel uninstall` frees the registration so the email can be used again. The client sends its device ID and current token, and the server deletes the record only if that token matches the one it last issued to the device.
 
 Self-hosters skip all of this and use static tokens (`--auth-tokens` / `GOTUNNEL_AUTH_TOKENS`) instead.
@@ -76,13 +76,13 @@ Self-hosters skip all of this and use static tokens (`--auth-tokens` / `GOTUNNEL
 GoTunnel is built so that the public-facing surface is the untrusted side.
 
 - **Token authentication** — the server requires one or more tokens (`--auth-tokens` / `GOTUNNEL_AUTH_TOKENS`). Tokens are compared as SHA-256 hashes using a constant-time comparison and are never written to logs. There is no default token; a server with no tokens configured refuses to start.
-- **Brute-force protection** — repeated failed authentications from the same IP trigger a temporary lockout (`--max-auth-failures`, `--auth-lockout`).
+- **Brute-force protection** — repeated failed authentications from the same IP within the `--auth-lockout` window trigger a temporary lockout (`--max-auth-failures`, `--auth-lockout`). A successful login does not clear earlier failures.
 - **Transport encryption** — TLS 1.2+ is supported on the raw TCP control channel (`--tls`), and the hosted subdomain mode terminates real TLS at the edge. Running without transport encryption is possible for local development but warned against for production.
-- **Optional mTLS** — the server can require client certificates signed by a given CA (`--tls-client-ca`), and the client can present a certificate (`--tls-cert` / `--tls-key`) for stronger client identity.
+- **Optional mTLS** — the server can require client certificates signed by a given CA (`--tls-client-ca`), and the client can present a certificate (`--tls-cert` / `--tls-key`) for stronger client identity. This needs `--tls` and a disabled WebSocket listener (`--ws-addr=`), and the server refuses to start otherwise.
 - **Configurable TLS server name** — the client verifies the server certificate against a configurable name (`--tls-servername`), defaulting to the `--server` host.
-- **Deadlines and limits** — public-facing reads have a first-byte deadline to blunt slowloris-style abuse, writes have deadlines to avoid hung connections, sessions have a maximum duration and an idle timeout, and the server can cap the number of concurrent tunnels (`--max-connections`).
+- **Deadlines and limits** — connections must authenticate within 15 seconds and are capped per IP until they do. Public-facing reads have a first-byte deadline to blunt slowloris-style abuse, control and public writes have deadlines to avoid hung connections, sessions have a maximum duration and an idle timeout, and the server can cap the number of concurrent tunnels (`--max-connections`). Closing a session always closes its connection.
 - **Session isolation** — one client cannot see another client's streams; each session has its own stream namespace, endpoint, and metrics.
-- **Frame limits** — a maximum frame size bounds memory per read and rejects oversized payloads.
+- **Frame limits** — a maximum frame size bounds memory per read and rejects oversized payloads, with a lower limit before authentication.
 - **Locked TCP tunnels** — unapproved connections are dropped before a stream opens. Per-IP connection rate limits, a per-tunnel connection cap, one TCP tunnel per account, and a fixed session length bound what an approved IP can do. IPs that repeatedly hit tunnels without approval are temporarily banned.
 - **Kernel gating (optional)** — with nftables, the TCP port range is closed in the kernel except for approved (IP, port) pairs, so scanners do not even see the port. Entries expire with the tunnel and are flushed when the server starts.
 - **Operator controls** — operators can list and close tunnels and ban accounts through a local, owner-only admin socket. Bans block both connecting and registering. Abuse patterns trigger email alerts.

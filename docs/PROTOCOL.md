@@ -27,7 +27,7 @@ Every message is a frame with a fixed 10-byte header followed by a payload.
 | Payload Len | 4 bytes | Payload length in bytes |
 | Payload | N bytes | Message payload |
 
-Frames whose declared payload length exceeds the maximum (16 MB) are rejected. Frames with an unknown version are rejected and the connection is closed.
+Frames whose declared payload length exceeds the maximum (1 MiB, or 64 KiB before authentication) are rejected. Frames with an unknown version are rejected and the connection is closed. The server answers `MsgPing` only when its payload is 8 bytes or less.
 
 ## Message types
 
@@ -117,7 +117,7 @@ TCP tunnels are locked: the server refuses every public connection whose source 
 ### 5. Stream lifecycle
 
 - **`MsgStreamOpen`** (server → client): a public connection arrived; the stream id in the header identifies it. The client dials the local service.
-- **`MsgStreamData`** (both): raw application bytes for that stream, up to 16 MB per frame.
+- **`MsgStreamData`** (both): raw application bytes for that stream, up to 1 MiB per frame.
 - **`MsgStreamClose`** (both): one side finished; the peer drains and releases the stream.
 
 Each public connection is exactly one stream. Stream ids are assigned sequentially by the server starting at 1.
@@ -140,7 +140,7 @@ Each public connection is exactly one stream. Stream ids are assigned sequential
 
 | Constraint | Value | Notes |
 | --- | --- | --- |
-| Max payload size | 16 MB | Per frame |
+| Max payload size | 1 MiB | Per frame (64 KiB before authentication) |
 | Frame header | 10 bytes | Fixed |
 | Stream id range | 1 – 2³²−1 | `0` reserved for control |
 | Heartbeat interval | 10s | |

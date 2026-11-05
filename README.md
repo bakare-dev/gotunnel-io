@@ -1,8 +1,8 @@
 # GoTunnel
 
-[![Download GoTunnel](https://img.shields.io/badge/Download-GoTunnel-0A66C2?style=for-the-badge)](https://gotunnel.bakaredev.site/download)
+[![Download GoTunnel](https://img.shields.io/badge/Download-GoTunnel-0A66C2?style=for-the-badge)](https://gotunnel.site/download)
 [![Latest Release](https://img.shields.io/github/v/release/bakare-dev/gotunnel-io?style=for-the-badge&label=Latest%20Release)](https://github.com/bakare-dev/gotunnel-io/releases/latest)
-[![Personal Project](https://img.shields.io/badge/Status-Personal%20Project-22C55E?style=for-the-badge)](https://gotunnel.bakaredev.site)
+[![Personal Project](https://img.shields.io/badge/Status-Personal%20Project-22C55E?style=for-the-badge)](https://gotunnel.site)
 
 HTTP and TCP tunnels that put a local app or database on the internet with one command.
 
@@ -15,13 +15,13 @@ This repository hosts the **prebuilt GoTunnel binaries**, the docs, and the smal
 macOS and Linux:
 
 ```bash
-curl -fsSL https://gotunnel.bakaredev.site/install.sh | sh
+curl -fsSL https://gotunnel.site/install.sh | sh
 ```
 
 Windows (PowerShell):
 
 ```powershell
-irm https://gotunnel.bakaredev.site/install.ps1 | iex
+irm https://gotunnel.site/install.ps1 | iex
 ```
 
 With npm (Node.js 22+):
@@ -38,7 +38,7 @@ go install github.com/bakare-dev/gotunnel-io/cmd/gotunnel@latest
 
 Pick one method; you only need GoTunnel installed once.
 
-Every method checks the download against the release's SHA-256 `checksums.txt`. The **[install guide](docs/INSTALL.md)** covers each one step by step, plus direct binary downloads, manual install, updating, uninstalling and troubleshooting. All builds are also on the [releases page](https://github.com/bakare-dev/gotunnel-io/releases/latest).
+The install scripts check the download against the release's SHA-256 `checksums.txt`, and the `go install` launcher and `gotunnel update` also verify that file's signature. npm relies on its own package integrity check. The **[install guide](docs/INSTALL.md)** covers each one step by step, plus direct binary downloads, manual install, updating, uninstalling and troubleshooting. All builds are also on the [releases page](https://github.com/bakare-dev/gotunnel-io/releases/latest).
 
 ## Quick start
 
@@ -50,7 +50,7 @@ gotunnel http 3000
 
 The first time you run it on a device, GoTunnel asks for your Gmail address and emails you a one-time code to register the device (one device per address). Your email is only used for that. After that, the device stays signed in and connects straight away.
 
-You'll get a public `https://<random>.gotunnel.bakaredev.site` URL forwarding to your local port. Press `q` or `Ctrl-C` to stop.
+You'll get a public `https://<random>.t.gotunnel.site` URL forwarding to your local port. Press `q` or `Ctrl-C` to stop.
 
 ### Share a database or other TCP service
 
@@ -58,7 +58,7 @@ You'll get a public `https://<random>.gotunnel.bakaredev.site` URL forwarding to
 gotunnel tcp 5432
 ```
 
-You get a host and port, e.g. `k3x9m2qz7a.tcp.gotunnel.bakaredev.site:20017`, that works with any normal client: `psql`, `mysql`, `mongosh`, `redis-cli`, `ssh`. TCP tunnels are **locked**: only IPs you allow with `--allowlist`, or that are approved through the link GoTunnel prints (the person connecting verifies their email once), can connect. See [`gotunnel tcp`](docs/CLI.md#gotunnel-tcp-port).
+You get a host and port, e.g. `k3x9m2qz7a.tcp.gotunnel.site:20017`, that works with any normal client: `psql`, `mysql`, `mongosh`, `redis-cli`, `ssh`. TCP tunnels are **locked**: only IPs you allow with `--allowlist`, or that are approved through the link GoTunnel prints (the person connecting verifies their email once), can connect. See [`gotunnel tcp`](docs/CLI.md#gotunnel-tcp-port).
 
 ## Update
 

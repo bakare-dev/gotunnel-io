@@ -15,10 +15,50 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+---
+
+## [1.3.0] - 2026-11-05
+
 ### Security
 
 - **HTTP tunnels:** the first time someone opens an HTTP tunnel in a browser, they see a warning page explaining that it is served from someone's own computer. They click **Continue to site** to go through, and that choice is remembered for 7 days on that tunnel. API clients, webhooks, scripts and in-page requests are not affected. Browser tools can skip the page by sending the `Gotunnel-Skip-Browser-Warning` header.
 - **Self-hosting:** turn the warning page on with `GOTUNNEL_BROWSER_WARNING=true`. It is off by default.
+- **Saved tokens stay with their server.** The token saved at registration is now sent only to the server that issued it, and only over an encrypted connection. `gotunnel uninstall` follows the same rule.
+- **Released and replaced tokens stop working.** After `gotunnel uninstall`, or after registering the same address again, older tokens for that device are refused at connect.
+- **Registration limits.** Verification emails and code attempts are now limited per address and per client, whichever device ID is used. Registration responses no longer reveal whether an address is already registered or suspended; the explanation goes to that inbox instead.
+- **Tunnel addresses no longer reveal the owner.** Stable subdomains are derived with a server-side secret, so nobody can work out your tunnel URL from your email.
+- **Warning page.** Form submissions from another site now see the warning page too, and your choice to continue is tied to your IP address, so you may see the page again when your network changes. Sign-in callbacks from identity providers still work once you have continued.
+- **Connection limits.** The server now disconnects connections that don't authenticate within 15 seconds, limits unauthenticated connections per IP, and refuses oversized frames before authentication.
+- **Failed account checks now refuse the connection.** If the server can't confirm an account isn't banned, it asks the client to try again shortly instead of letting it connect.
+- Visitor-controlled text in request logs and server messages is now escaped, so it can't forge log lines or send control codes to your terminal.
+- **Request inspector.** The inspector now needs the link GoTunnel prints, with a token that changes on every run, so other users on the same machine can't read your traffic. It can no longer be framed by another page, and **Copy as cURL** leaves out unusual request methods so a pasted command can only run curl.
+- **Control channel.** Browsers can no longer open the WebSocket control channel.
+- **Signed releases.** Each release's `checksums.txt` is now signed. `gotunnel update` and the `go install` launcher verify that signature and the download's checksum before installing, and `gotunnel update` refuses to move to an older version. To check a download yourself, run `minisign -Vm checksums.txt -P RWTnJ6MHF0SvG0vo+EamvWQR10MhqWswNtQ4SqTqG/TEOzSMa6ZcR1Cb`.
+- **TCP approvals.** Approving a tunnel now opens only that tunnel. Unapproved attempts on one tunnel no longer cut an IP off from another tunnel that allows it. Approver emails must be plain ASCII.
+
+### Fixed
+
+- **Warning page:** clicking **Continue to site** could show the warning page again instead of opening the site.
+- A tunnel could stop accepting new visitors after many visitors closed their connections first. Those slots are now always freed.
+- A closed session now always drops its connection, so a client that stops responding after a time limit, kill or ban can't hold its port and capacity slot.
+- A client that stops reading can no longer delay its session limit or grow the server's memory use.
+- One visitor reading slowly can no longer stall other visitors on the same tunnel. A stream whose visitor stops reading for 5 seconds with its buffers full is closed.
+- `--max-bandwidth` and `GOTUNNEL_TCP_MAX_BANDWIDTH` now count every byte, including large frames from modified clients.
+- **Self-hosting:** nftables entries for TCP tunnels are now removed when the tunnel ends, so old approvals can't reach a later tunnel on the same port.
+- **Self-hosting:** the failed-login count now expires after `--auth-lockout` and is no longer cleared by a successful login from the same IP.
+
+### Changed
+
+- **GoTunnel moved to `gotunnel.site`.** The site is now `gotunnel.site`, docs are at `docs.gotunnel.site`, HTTP tunnels use `*.t.gotunnel.site` and TCP tunnels use `*.tcp.gotunnel.site`. Update with `gotunnel update` to keep using the hosted server.
+
+### Breaking
+
+- **Self-hosting:** `GOTUNNEL_SIGNING_KEY` must now be at least 32 characters. The server refuses to start with a shorter key.
+- **Self-hosting:** reload `gotunnel.nft` when you upgrade if you use kernel gating. Bans no longer block IPs a tunnel has approved.
+- **Self-hosting:** `--tls-client-ca` now requires `--tls` and a disabled WebSocket listener (`--ws-addr=`), because client certificates can't be checked anywhere else. The server refuses to start otherwise.
+- **Self-hosting:** a saved token from before this release is treated as belonging to the hosted server. If you registered with your own server, register again or set `GOTUNNEL_TOKEN`.
+- **Stable subdomains and TCP hostnames change once** with this release. Update anything that points at your old address.
+- `gotunnel client` with no token and an unencrypted server now stops with instructions instead of starting registration.
 
 ---
 
@@ -97,6 +137,7 @@ The first release of GoTunnel, a free personal side project by [BakareDev](https
 ---
 
 [Unreleased]: https://github.com/bakare-dev/gotunnel-io/releases
+[1.3.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.3.0
 [1.2.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.2.0
 [1.1.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.1.0
 [1.0.0]: https://github.com/bakare-dev/gotunnel-io/releases/tag/v1.0.0
